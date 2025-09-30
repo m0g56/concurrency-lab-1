@@ -129,8 +129,11 @@ func filter(filepathIn, filepathOut string, threads int) {
 			output := make(chan [][]uint8)
 			go worker((height * i / threads), (height * (i + 1) / threads), 0, width, immutableData, output)
 			reconstruct = append(reconstruct, output)
+		}
+		for i := 0; i < threads; i++ {
 			newPixelData = append(newPixelData, <-reconstruct[i]...)
 		}
+
 	}
 
 	imout := image.NewGray(image.Rect(0, 0, width, height))
